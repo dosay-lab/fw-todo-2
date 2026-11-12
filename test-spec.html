@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ToDoアプリ テスト仕様書</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 12px; font-family: sans-serif; font-size: 11px; color: #222; }
+        h1 { margin: 0; font-size: 18px; }
+        .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px; }
+        .guide { margin: 0 0 8px; }
+        button { padding: 6px 12px; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        col:nth-child(1) { width: 5%; }
+        col:nth-child(2) { width: 20%; }
+        col:nth-child(3) { width: 15%; }
+        col:nth-child(4) { width: 25%; }
+        col:nth-child(5) { width: 10%; }
+        col:nth-child(6) { width: 25%; }
+        th, td { border: 1px solid #777; padding: 4px; vertical-align: top; overflow-wrap: anywhere; }
+        th { background: #eee; text-align: left; }
+        td:first-child { text-align: center; }
+        .choices { display: flex; flex-wrap: wrap; gap: 4px; }
+        .choices label { white-space: nowrap; }
+        textarea { display: block; width: 100%; min-height: 38px; padding: 3px; font: inherit; line-height: 1.4; resize: vertical; overflow: hidden; }
+        .print-note, .print-result { display: none; }
+        @media print {
+            body { margin: 0; font-size: 9px; }
+            .top button { display: none; }
+            th, td { break-inside: avoid; }
+            thead { display: table-header-group; }
+            textarea, .choices { display: none; }
+            .print-note, .print-result { display: block; white-space: pre-wrap; overflow-wrap: anywhere; }
+            .print-note:empty::after, .print-result:empty::after { content: "　"; }
+            @page { size: A4 landscape; margin: 8mm; }
+        }
+    </style>
+</head>
+<body>
+    <div class="top">
+        <h1>ToDoアプリ テスト仕様書</h1>
+        <button type="button" id="print-button">PDFで保存</button>
+    </div>
+    <p class="guide">対象：<a href="http://localhost:8080/todos">http://localhost:8080/todos</a> ／ 開始時：todos に5行。上から順に実施し、各行の結果と備考を記入してください。試験用の行は最後に削除します。</p>
+    <table>
+        <colgroup><col><col><col><col><col><col></colgroup>
+        <thead><tr><th>番号</th><th>確かめること</th><th>入れる値</th><th>期待する結果</th><th>結果</th><th>備考/NG</th></tr></thead>
+        <tbody>
+            <tr><td>1</td><td>一覧の初期表示</td><td>/todos を開く</td><td>5行が「やること／ジャンル／優先度／期限／状態／操作」の列で期限が近い順に並び、絞り込み欄と2本の並び替えリンクと新規登録が表示される。</td></tr>
+            <tr><td>2</td><td>登録画面の入力欄</td><td>「新規登録」を押す</td><td>やること、メモ、ジャンル、優先度、期限の5欄と「確認する」「一覧へ」が表示され、ジャンルは5種類、優先度は高・中・低から選べて、両方とも最初は未選択である。</td></tr>
+            <tr><td>3</td><td>登録画面から一覧へ戻る</td><td>「一覧へ」を押し、再び「新規登録」を押す</td><td>一覧に戻ったあと、再び5つの入力欄がある登録画面が表示される。</td></tr>
+            <tr><td>4</td><td>やること未入力の確認</td><td>やることを空にして「確認する」</td><td>登録画面のやること欄の下に「やることを入力してください」と表示される。</td></tr>
+            <tr><td>5</td><td>やることに半角空白だけを入力</td><td>やることに半角空白だけを入れて「確認する」</td><td>登録画面のやること欄の下に「やることを入力してください」と表示される。</td></tr>
+            <tr><td>6</td><td>やることに全角空白だけを入力</td><td>やることに全角空白だけを入れて「確認する」</td><td>登録画面のやること欄の下に「やることを入力してください」と表示される。</td></tr>
+            <tr><td>7</td><td>やることの文字数制限</td><td>やることに256文字を入れて「確認する」</td><td>登録画面のやること欄の下に「やることは255文字以内で入力してください」と表示される。</td></tr>
+            <tr><td>8</td><td>メモの文字数制限</td><td>やることを「試験用課題A」、メモを256文字にして「確認する」</td><td>登録画面のメモ欄の下に「メモは255文字以内で入力してください」と表示される。</td></tr>
+            <tr><td>9</td><td>ジャンル未選択の確認</td><td>メモを空にし、ジャンルを未選択にして「確認する」</td><td>登録画面のジャンル欄の下に「ジャンルを選んでください」と表示される。</td></tr>
+            <tr><td>10</td><td>優先度未選択の確認</td><td>ジャンルを「プログラミング」、優先度を未選択にして「確認する」</td><td>登録画面の優先度欄の下に「優先度を選んでください」と表示される。</td></tr>
+            <tr><td>11</td><td>登録の確認画面</td><td>やること「試験用課題A」、メモ空、ジャンル「プログラミング」、優先度「中」、期限空で「確認する」</td><td>登録の確認画面に5項目が文字で並び、空のメモと期限は「（入力なし）」と表示され、「登録する」「書き直す」が表示される。</td></tr>
+            <tr><td>12</td><td>登録内容の書き直し</td><td>「書き直す」を押す</td><td>登録画面に戻り、やること「試験用課題A」、ジャンル「プログラミング」、優先度「中」が入力されたまま表示される。</td></tr>
+            <tr><td>13</td><td>新しい1件の登録と表示文</td><td>期限を「2030-01-10」にして「確認する」→「登録する」</td><td>一覧のいちばん上に「登録しました」と表示され、試験用課題Aを含む6行が表示される。</td></tr>
+            <tr><td>14</td><td>登録直後の値の表示</td><td>一覧の「試験用課題A」の行を見る</td><td>その行に「プログラミング」「中」「2030-01-10」「未完了」と編集・削除のリンクが表示される。</td></tr>
+            <tr><td>15</td><td>編集画面の入力欄と初期値</td><td>試験用課題Aの「編集」を押す</td><td>5つの登録項目と完了の欄に現在の値が入り、「確認する」「一覧へ」が表示される。</td></tr>
+            <tr><td>16</td><td>編集時のやること未入力</td><td>やることを空にして「確認する」</td><td>編集画面のやること欄の下に「やることを入力してください」と表示される。</td></tr>
+            <tr><td>17</td><td>編集時のやること文字数制限</td><td>やることに256文字を入れて「確認する」</td><td>編集画面のやること欄の下に「やることは255文字以内で入力してください」と表示される。</td></tr>
+            <tr><td>18</td><td>編集時のメモ文字数制限</td><td>やることを「試験用課題A」に戻し、メモに256文字を入れて「確認する」</td><td>編集画面のメモ欄の下に「メモは255文字以内で入力してください」と表示される。</td></tr>
+            <tr><td>19</td><td>編集時のジャンル未選択</td><td>メモを空にし、ジャンルを未選択にして「確認する」</td><td>編集画面のジャンル欄の下に「ジャンルを選んでください」と表示される。</td></tr>
+            <tr><td>20</td><td>編集時の優先度未選択</td><td>ジャンルを「プログラミング」に戻し、優先度を未選択にして「確認する」</td><td>編集画面の優先度欄の下に「優先度を選んでください」と表示される。</td></tr>
+            <tr><td>21</td><td>編集画面から一覧へ戻る</td><td>「一覧へ」を押し、試験用課題Aの「編集」を押す</td><td>一覧に戻ったあと、試験用課題Aの保存済みの値が入った編集画面が表示される。</td></tr>
+            <tr><td>22</td><td>編集の確認画面</td><td>やること「編集済み試験用課題A」、ジャンル「デザイン」、優先度「高」、期限「2030-02-15」、完了にチェックを入れて「確認する」</td><td>編集の確認画面に変更した値が文字で並び、「保存する」「書き直す」が表示される。</td></tr>
+            <tr><td>23</td><td>編集内容の書き直し</td><td>「書き直す」を押す</td><td>編集画面に戻り、「編集済み試験用課題A」「デザイン」「高」「2030-02-15」と完了のチェックが残る。</td></tr>
+            <tr><td>24</td><td>編集の保存と表示文</td><td>「確認する」→「保存する」</td><td>一覧のいちばん上に「保存しました」と表示され、試験用の行に「編集済み試験用課題A」「デザイン」「高」「2030-02-15」「完了」が表示される。</td></tr>
+            <tr><td>25</td><td>名前の一部で絞り込む</td><td>keyword に「試験用課題」、category は「すべて」で「絞り込む」</td><td>名前に「試験用課題」を含む行だけが一覧に表示され、編集済み試験用課題Aの行が残る。</td></tr>
+            <tr><td>26</td><td>ジャンルが一致する行で絞り込む</td><td>keyword を空にし、category を「デザイン」にして「絞り込む」</td><td>ジャンルが「デザイン」の行だけが一覧に表示され、編集済み試験用課題Aの行が残る。</td></tr>
+            <tr><td>27</td><td>名前とジャンルを組み合わせて絞り込む</td><td>keyword に「試験用課題」、category を「デザイン」にして「絞り込む」</td><td>名前に「試験用課題」を含み、ジャンルが「デザイン」の行だけが表示される。</td></tr>
+            <tr><td>28</td><td>絞り込み結果が0件の表示</td><td>keyword は「試験用課題」のまま、category を「プログラミング」にして「絞り込む」</td><td>一覧に「まだ1件も登録されていません」と表示される。</td></tr>
+            <tr><td>29</td><td>絞り込み条件を両方外す</td><td>keyword を空にし、category を「すべて」にして「絞り込む」</td><td>絞り込みのない一覧に6行が表示される。</td></tr>
+            <tr><td>30</td><td>期限が近い順に並び替える</td><td>「期限が近い順」を押す</td><td>一覧の行が期限の近い順に表示される。</td></tr>
+            <tr><td>31</td><td>期限が遠い順に並び替える</td><td>「期限が遠い順」を押す</td><td>一覧の行が期限の遠い順に表示される。</td></tr>
+            <tr><td>32</td><td>絞り込みで並び順を保つ</td><td>遠い順のまま keyword「試験用課題」、category「デザイン」で「絞り込む」</td><td>編集済み試験用課題Aが表示され、アドレスの末尾に keyword、category、order=desc が付く。</td></tr>
+            <tr><td>33</td><td>並び替えで絞り込み条件を保つ</td><td>「期限が近い順」を押す</td><td>編集済み試験用課題Aが表示されたまま、アドレスに keyword、category、order=asc が付く。</td></tr>
+            <tr><td>34</td><td>絞り込み済みのアドレスを開き直す</td><td>現在のアドレスをコピーして再度開く</td><td>keyword「試験用課題」と category「デザイン」で絞った一覧が期限の近い順で表示される。</td></tr>
+            <tr><td>35</td><td>存在しない番号の編集画面</td><td>/todos/999999999999/edit を開く</td><td>一覧に戻り、いちばん上に「見つかりませんでした」と表示される。</td></tr>
+            <tr><td>36</td><td>存在しない番号の削除確認画面</td><td>/todos/999999999999/delete を開く</td><td>一覧に戻り、いちばん上に「見つかりませんでした」と表示される。</td></tr>
+            <tr><td>37</td><td>削除確認画面の内容</td><td>編集済み試験用課題Aの「削除」を押す</td><td>削除確認画面にその行のやること、ジャンル、期限が文字で表示され、「消す」「やめる」が表示される。</td></tr>
+            <tr><td>38</td><td>削除をやめる</td><td>「やめる」を押す</td><td>一覧に戻り、編集済み試験用課題Aの行が表示される。</td></tr>
+            <tr><td>39</td><td>試験用の行を削除して5行に戻す</td><td>編集済み試験用課題Aの「削除」→「消す」</td><td>一覧のいちばん上に「削除しました」と表示され、試験用の行が消えて5行が表示される。</td></tr>
+        </tbody>
+    </table>
+    <script>
+        function updateNote(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.max(38, textarea.scrollHeight) + 'px';
+            textarea.nextElementSibling.textContent = textarea.value;
+        }
+
+        document.querySelectorAll('tbody tr').forEach((row, index) => {
+            const resultCell = row.cells[4];
+            const noteCell = row.cells[5];
+            const choices = document.createElement('div');
+            choices.className = 'choices';
+            for (const value of ['OK', 'NG']) {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'result-' + (index + 1);
+                radio.value = value;
+                label.append(radio, value);
+                choices.append(label);
+            }
+            const printedResult = document.createElement('span');
+            printedResult.className = 'print-result';
+            resultCell.append(choices, printedResult);
+            choices.addEventListener('change', () => {
+                printedResult.textContent = choices.querySelector('input:checked')?.value || '';
+            });
+
+            const textarea = document.createElement('textarea');
+            textarea.setAttribute('aria-label', (index + 1) + '番の備考/NG');
+            const printedNote = document.createElement('div');
+            printedNote.className = 'print-note';
+            noteCell.append(textarea, printedNote);
+            textarea.addEventListener('input', () => updateNote(textarea));
+            updateNote(textarea);
+        });
+
+        function preparePrint() {
+            document.querySelectorAll('textarea').forEach(updateNote);
+            document.querySelectorAll('tbody tr').forEach(row => {
+                row.querySelector('.print-result').textContent = row.querySelector('input[type="radio"]:checked')?.value || '';
+            });
+        }
+
+        window.addEventListener('beforeprint', preparePrint);
+        document.getElementById('print-button').addEventListener('click', () => {
+            preparePrint();
+            window.print();
+        });
+    </script>
+</body>
+</html>

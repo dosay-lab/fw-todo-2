@@ -7,7 +7,9 @@
 </head>
 <body>
     <main class="container">
+        <p class="flash" th:if="${message}" th:text="${message}"></p>
         <h1 class="page-title">やること一覧</h1>
+        <a class="link" th:href="@{/todos/new}">新規登録</a>
         <p th:if="${#lists.isEmpty(todos)}">まだ1件も登録されていません</p>
         <table class="todo-table" th:unless="${#lists.isEmpty(todos)}">
             <thead>

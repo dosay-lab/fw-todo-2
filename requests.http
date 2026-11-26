@@ -33,3 +33,35 @@ GET https://holidays-jp.github.io/api/v1/date.json
 
 ### 6. 自分のアプリの祝日API
 GET http://localhost:8080/api/holidays
+### 7. 履歴書を準備する
+POST http://localhost:8080/api/todos
+Content-Type: application/json
+
+{
+  "title": "履歴書の自己PRを作成する",
+  "category": "応募書類",
+  "priority": 1,
+  "dueDate": "2026-04-04"
+}
+
+### 8. 面接の練習をする
+POST http://localhost:8080/api/todos
+Content-Type: application/json
+
+{
+  "title": "面接の自己紹介を練習する",
+  "category": "面接対策",
+  "priority": 2,
+  "dueDate": "2026-04-04"
+}
+
+### 9. 企業を調べる
+POST http://localhost:8080/api/todos
+Content-Type: application/json
+
+{
+  "title": "気になる企業の事業内容を調べる",
+  "category": "企業研究",
+  "priority": 3,
+  "dueDate": "2026-04-04"
+}

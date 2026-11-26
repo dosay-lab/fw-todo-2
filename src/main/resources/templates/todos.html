@@ -10,6 +10,7 @@
         <p class="flash" th:if="${message}" th:text="${message}"></p>
         <h1 class="page-title">やること一覧</h1>
         <a class="link" th:href="@{/todos/new}">新規登録</a>
+        <a class="link" th:href="@{/calendar}">カレンダーで見る</a>
         <form class="search-bar" th:action="@{/todos}" method="get">
             <label for="keyword">やることの名前</label>
             <input type="text" id="keyword" name="keyword" th:value="${keyword}">
